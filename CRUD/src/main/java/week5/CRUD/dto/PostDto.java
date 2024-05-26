@@ -12,11 +12,18 @@ public class PostDto {
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime postDate;
+    private LocalDateTime registerDate;
+    private Long memberId;
 
     public static PostDto from(Post post) {
         PostDto postDto = new PostDto();
-        postDto.setId(postDto.getId());
+        postDto.setId(post.getId());
+        postDto.setTitle(post.getTitle());
+        postDto.setContent(post.getContent());
+        postDto.setRegisterDate(post.getRegisterDate());
+        if (post.getMember() != null) {
+            postDto.setMemberId(post.getMember().getId());
+        }
         return postDto;
     }
 }

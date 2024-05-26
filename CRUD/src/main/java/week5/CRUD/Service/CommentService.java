@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import week5.CRUD.Repository.CommentRepository;
 import week5.CRUD.domain.Comment;
+import week5.CRUD.dto.CommentDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +23,27 @@ public class CommentService {
     public Comment registerComment(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    @Transactional
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Comment updateComment(Long id, CommentDto commentDto) {
+        Optional<Comment> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isPresent()) {
+            Comment comment = commentOptional.get();
+            if (commentDto.getContent() != null) {
+                comment.setContent(commentDto.getContent());
+            }
+            return commentRepository.save(comment);
+        } else {
+            throw new RuntimeException("Comment not found with id " + id);
+        }
+    }
+
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
-    public Optional<Comment> getCommentById(Long id) {
-        return commentRepository.findById(id);
-    }
-
 }
